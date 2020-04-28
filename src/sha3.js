@@ -19,16 +19,17 @@ class Hasher {
   constructor (hashFunc, arg) {
     this.hf = hashFunc
     this.arg = arg
-    this.input = null
+    this.input = []
   }
 
   update (buf) {
-    this.input = buf
+    this.input.push(buf)
     return this
   }
 
   digest () {
-    const input = this.input
+    const input = Buffer.concat(this.input)
+    this.input = null
     const arg = this.arg
     return Buffer.from(this.hf(input, arg), 'hex')
   }

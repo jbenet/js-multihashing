@@ -94,6 +94,7 @@ multihashing(buf, 'sha1')
 multihashing.digest(buf, 'sha1')
 
 // Use `.createHash(...)` for a `crypto.createHash` interface.
+// NOTE: The interface does not support streaming and only exposes .update(buffer) and .digest(type)
 var h = multihashing.createHash('sha1')
 h.update(buf)
 h.digest()

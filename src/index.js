@@ -32,7 +32,26 @@ mh.createHash = function (func, length) {
     throw new Error('multihash function ' + func + ' not yet supported')
   }
 
-  return mh.functions[func]()
+  const fnc = mh.functions[func]()
+
+  return {
+    update: (buf) => fnc.update(buf),
+    digest: (type) => {
+      let digest = fnc.digest()
+
+      if (length) {
+        digest = digest.slice(0, length)
+      }
+
+      let hash = multihash.encode(digest, func, length)
+
+      if (type) { // e.x. .digest('hex')
+        return hash.toString(type)
+      } else {
+        return hash
+      }
+    }
+  }
 }
 
 mh.verify = function (hash, buf) {

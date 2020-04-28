@@ -71,6 +71,17 @@ describe('multihashing', () => {
         expect(multihashing.verify(output, input)).to.be.eql(true)
       }
     })
+
+    it(algo + ' stream', () => {
+      for (const test of tests[algo]) {
+        const input = Buffer.from(test[0])
+        const output = Buffer.from(test[1], 'hex')
+        const slices = test[0].split('').map(Buffer.from)
+        const h = multihashing.createHash(algo)
+        slices.forEach(h.update)
+        expect(multihashing.verify(h.digest(), input)).to.be.eql(true)
+      }
+    })
   }
 
   it('cuts the length', () => {
